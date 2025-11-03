@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Register - Hotel Booker</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="card">
+    <h1>Create account</h1>
+    <form id="registerForm">
+      <label>
+        Username
+        <input type="text" name="username" required />
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" required minlength="6" />
+      </label>
+      <button type="submit">Register</button>
+    </form>
+    <p class="muted">Already have an account? <a href="/login">Log in</a></p>
+    <div id="message" role="status"></div>
+  </main>
+  <script src="/client.js" defer></script>
+</body>
+</html>
