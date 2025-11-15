@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Southern Swap</title>
+  <link rel="stylesheet" href="css/main-styles.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=Aleo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar Section -->
+    <nav class="navbar">
+      <div class="navbar__container">
+        <a href="#home" id="navbar__logo">SOUTHERN <br> SWAP</a>
+        <div class="navbar__toggle" id="mobile-menu">
+          <span class="bar"></span> <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <ul class="navbar__menu">
+          <li class="navbar__item">
+            <a href="#home" class="navbar__links" id="home-page">HOME</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#about" class="navbar__links" id="about-page">SHOP</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#services" class="navbar__links" id="services-page"
+              >CONTACT</a>
+          </li>
+          <li class="navbar__btn">
+            <a href="login.html" class="button" id="signup">SELLER LOGIN</a>
+          </li>
+          <li class="navbar__item">
+            <a href="cart.html" class="navbar__links">
+              <i class="fas fa-shopping-cart"></i> Cart (<span id="cartCount">0</span>)
+            </a>
+          </li>
+        </ul>
+      </div>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Intro Section -->
+  <div class="intro" id="home">
+    <div class="intro_text">
+      <h1 class="intro_heading">Southern Swap</h1>
+      <p class="intro_description">
+        Welcome to Southern Swap, the official store for all your university gear! Whether you're looking for apparel, accessories, or the latest tech for your studies, we've got you covered. Shop high-quality, officially licensed products and show off your school pride in style.—all in one place!
+      </p>
+      <li class="intro_btn">
+        <a href="#products" class="shopnew_btn" id="shop_now">SHOP NOW</a>
+      </li>
+    </div>
+    <div class="intro_logo">
+      <img src="images/intro_logo.jpg" alt="Owl intro logo">
+    </div>
+  </div>
+
+  <!-- Shop Section -->
+  <div class="shop_section">
+    <h2 class="shop_heading">Our products</h2>
+
+    <!-- Filter and Sort Options -->
+    <div class="shop_filters">
+      <select id="categoryFilter" onchange="filterByCategory()">
+        <option value="">Show all products</option>
+        <option value="electronics">Electronics</option>
+        <option value="stationery">Stationery</option>
+      </select>
+      <button onclick="sortByPrice()">Sort by Price</button>
+    </div>
+
+      <!-- Products Grid -->
+      <div id="products" class="products_grid">
+        <!-- 
+        example of product card:
+        <div class="product_card" data-category="electronics" data-id="1">
+          <img src="images/headphones.jpg" class="product_image">
+          <p class="product_name">Headphones</p>
+          <p class="product_price">$299.99</p>
+        </div> 
+        -->
+      </div>
+
+      <!-- Product Details Section -->
+      <div id="product_details" style="display: none;">
+        <img id="details_image" src="" alt="Product Image">
+        <h1 id="details_name"></h1>
+        <p id="details_price"></p>
+        <p id="details_description"></p>
+
+        <div id="back_to_products" class="product_btn">Back to Products</div>
+        <div id="shoppingCart" class="product_btn"> <a class="add_to_cart" href="cart.html">Add to shopping cart</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Script -->
+  <script src="js/scripts.js"></script>
+</body>
+</html>
