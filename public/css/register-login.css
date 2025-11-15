@@ -1,0 +1,93 @@
+:root {
+  --bg: #f3f6fb;
+  --card: #ffffff;
+  --accent: #0b74de;
+  --muted: #666666;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.card {
+  background: var(--card);
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 6px 30px rgba(16, 24, 40, 0.08);
+  width: 320px;
+}
+
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  color: #222222;
+}
+
+
+input {
+  padding: 10px;
+  border: 1px solid #e6e9ef;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #ffffff;
+  color: inherit;
+}
+
+button:focus {
+  outline: 3px solid rgba(11, 116, 222, 0.15);
+  outline-offset: 2px;
+}
+
+button {
+  background: var(--accent);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  border: 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+
+#message {
+  margin-top: 10px;
+  font-size: 13px;
+}
