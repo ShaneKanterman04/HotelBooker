@@ -2,74 +2,57 @@ const express = require('express');
 const db = require('./db.js');
 require('dotenv').config();
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(process.cwd(), 'public')));
+const publicDir = path.join(__dirname, '..', 'public');
+app.use(express.static(publicDir));
 
-// Api Calls
-
-// Register
+// Register - expects { username, email, password }
 app.post('/register', async (req, res) => {
-  const { username, password, role = 'user' } = req.body;
-  try {
-    await db.query('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', [username, password, role]);
-    res.json({ message: 'User registered', role });
-  } catch (err) {
-    res.status(400).json({ error: 'Username already exists' });
-  }
+	const { username, email, password } = req.body;
+	if (!username || !email || !password) return res.status(400).json({ error: 'Missing fields' });
+
+	try {
+		const hashed_password = await bcrypt.hash(password, 10);
+		await db.query('INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)', [username, email, hashed_password]);
+		return res.json({ message: 'User registered' });
+	} 
+  catch (err) {
+		if (err && err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: 'Email already registered' });
+		console.error('Register error', err);
+		return res.status(500).json({ error: 'Failed to register' });
+	}
 });
 
-// Login
+// Login - expects { email, password }
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const [rows] = await db.query('SELECT * FROM users WHERE username=? AND password=?', [username, password]);
-  if (rows.length === 0) return res.status(400).json({ error: 'Invalid credentials' });
-  res.json({ message: 'Login successful', role: rows[0].role });
+	const { email, password } = req.body;
+	if (!email || !password) return res.status(400).json({ error: 'Missing fields' });
+
+	try {
+		const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+		if (!rows || rows.length === 0) return res.status(400).json({ error: 'Invalid credentials' });
+		const user = rows[0];
+		const ok = await bcrypt.compare(password, user.password_hash);
+
+		if (!ok) return res.status(400).json({ error: 'Invalid credentials' });
+		return res.json({ message: 'Login successful' });
+	} 
+  catch (err) {
+		console.error('Login error', err);
+		return res.status(500).json({ error: 'Login failed' });
+	}
 });
 
-// Fetch Users
-app.get('/api/users', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT id, username, role FROM users');
-    res.json({ users: rows });
-  } catch (err) {
-    console.error('Failed to fetch users', err);
-    res.status(500).json({ error: 'Failed to fetch users' });
-  }
-});
-
-// Test
-app.get('/', (req, res) => {
-  res.send('Hotel Booker API running');
-});
-
-
-// Pages
-
-// Login
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'login.html'));
-});
-
-// Register
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'register.html'));
-});
-
-// Successful login
-app.get('/success', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'success.html'));
-});
-
-// Admin Page
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'admin.html'));
-});
-
+// Serve pages (static middleware already serves files in /public)
+app.get('/', (req, res) => res.sendFile(path.join(publicDir, 'main.html')));
+app.get('/login', (req, res) => res.sendFile(path.join(publicDir, 'login.html')));
+app.get('/register', (req, res) => res.sendFile(path.join(publicDir, 'register.html')));
+app.get('/success', (req, res) => res.sendFile(path.join(publicDir, 'success.html')));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Hotel Booker server running on port ${port}`));
