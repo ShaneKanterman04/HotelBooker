@@ -1,8 +1,7 @@
-import express from 'express';
-import { db } from './db.js';
-import dotenv from 'dotenv';
-import path from 'path';
-dotenv.config();
+const express = require('express');
+const db = require('./db.js');
+require('dotenv').config();
+const path = require('path');
 
 const app = express();
 app.use(express.json());
