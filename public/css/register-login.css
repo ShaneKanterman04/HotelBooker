@@ -1,15 +1,18 @@
 :root {
-  --bg: #f3f6fb;
+  /* Color variables for the register/login pages */
+  --bg: #f0f8f4;
   --card: #ffffff;
-  --accent: #0b74de;
-  --muted: #666666;
+  --accent: #0b6b45;
+  --muted: #59605f;
 }
 
+/* Reset box model for all elements */
 * {
   box-sizing: border-box;
 }
 
 
+/* Page layout: center the card vertically/horizontally */
 body {
   margin: 0;
   background: var(--bg);
@@ -20,6 +23,7 @@ body {
   height: 100vh;
 }
 
+/* Card container for the form */
 .card {
   background: var(--card);
   padding: 28px;
@@ -29,12 +33,14 @@ body {
 }
 
 
+/* Page title inside the card */
 h1 {
   margin: 0 0 12px;
   font-size: 20px;
 }
 
 
+/* Form layout: vertical stack with gaps */
 form {
   display: flex;
   flex-direction: column;
@@ -42,6 +48,7 @@ form {
 }
 
 
+/* Label styling for inputs */
 label {
   display: flex;
   flex-direction: column;
@@ -50,6 +57,7 @@ label {
 }
 
 
+/* Form input fields */
 input {
   padding: 10px;
   border: 1px solid #e6e9ef;
@@ -59,11 +67,13 @@ input {
   color: inherit;
 }
 
+/* Focus ring for buttons (accessibility) */
 button:focus {
-  outline: 3px solid rgba(11, 116, 222, 0.15);
+  outline: 3px solid rgba(11, 107, 69, 0.15);
   outline-offset: 2px;
 }
 
+/* Primary action button */
 button {
   background: var(--accent);
   color: #ffffff;
@@ -74,19 +84,30 @@ button {
   cursor: pointer;
 }
 
+/* Disabled state for buttons */
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-
+/* Muted helper text (links and messages) */
 .muted {
   color: var(--muted);
   font-size: 13px;
   margin-top: 8px;
 }
 
+/* Link styles used in the muted paragraph */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
 
+a:hover {
+  text-decoration: underline;
+}
+
+/* Status / message container under the form */
 #message {
   margin-top: 10px;
   font-size: 13px;
