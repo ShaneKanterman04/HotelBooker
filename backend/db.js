@@ -1,9 +1,9 @@
 const mysql = require('mysql2/promise');
 
 const db = mysql.createPool({
-  host: '35.202.230.168',  // Replace with your Google Cloud VM external IP
+  host: '35.202.230.168',
   user: 'hoteluser',
-  password: 'your_strong_password_here',  // Replace with your MySQL password
+  password: 'your_strong_password_here',  
   database: 'hotel_booker',
   port: 3306,
   
