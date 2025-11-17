@@ -1,6 +1,5 @@
 const express = require('express');
 const db = require('./db.js');
-require('dotenv').config();
 const path = require('path');
 const bcrypt = require('bcrypt');
 
@@ -54,5 +53,5 @@ app.get('/login', (req, res) => res.sendFile(path.join(publicDir, 'login.html'))
 app.get('/register', (req, res) => res.sendFile(path.join(publicDir, 'register.html')));
 app.get('/success', (req, res) => res.sendFile(path.join(publicDir, 'success.html')));
 
-const port = process.env.PORT || 3000;
+const port = 3000;
 app.listen(port, () => console.log(`Hotel Booker server running on port ${port}`));

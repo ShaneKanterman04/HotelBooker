@@ -1,11 +1,11 @@
 const mysql = require('mysql2/promise');
-require('dotenv').config();
 
 const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
+  host: '35.202.230.168',  // Replace with your Google Cloud VM external IP
+  user: 'hoteluser',
+  password: 'your_strong_password_here',  // Replace with your MySQL password
+  database: 'hotel_booker',
+  port: 3306,
   
   waitForConnections: true,
   connectionLimit: 10,
