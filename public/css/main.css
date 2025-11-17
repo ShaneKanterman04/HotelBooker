@@ -1,3 +1,4 @@
+/* Reset box model and base font for the site */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,7 +7,7 @@
     scroll-behavior: smooth;
 }
 
-/* Hotel navigation */
+/* Top navigation bar (brand + actions) */
 .hotel-nav {
     background: linear-gradient(
         135deg,
@@ -24,6 +25,7 @@
     z-index: 999;
 }
 
+/* Container inside the nav for layout and spacing */
 .hotel-nav__container {
     display: flex;
     justify-content: space-between;
@@ -35,6 +37,7 @@
     padding: 0 50px;
 }
 
+/* Brand/logo link in the nav */
 .hotel-logo {
     display: flex;
     align-items: center;
@@ -45,12 +48,14 @@
     font-weight: 700;
 }
 
+/* Navigation menu (list of actions) */
 .hotel-menu {
     display: flex;
     align-items: center;
     list-style: none;
 }
 
+/* Individual menu button wrapper */
 .hotel-menu__btn {
     display: flex;
     justify-content: center;
@@ -58,6 +63,7 @@
     padding: 0 1rem;
 }
 
+/* Button style used in nav (login/register) */
 .hotel-button {
     display: flex;
     justify-content: center;
@@ -70,6 +76,7 @@
     color: #efe9dd;
     border-radius: 4px;
 }
+/* Responsive rules for smaller screens (mobile menu behavior) */
 @media screen and (max-width: 960px) {
     .hotel-nav__container {
         padding: 0;
@@ -148,8 +155,7 @@
 }
 
 
-/* Hero section */
-
+/* Hero / Intro section (large visual area with heading + logo) */
 .hotel-hero {
     display: flex;
     justify-content: space-between;
@@ -164,6 +170,7 @@
     overflow: hidden;
 }
 
+/* Text column inside the hero (heading, description, CTA) */
 .hotel-hero__text {
     flex: 1;
     text-align: left;
@@ -174,12 +181,14 @@
     gap: 20px;
 }
 
+/* Hero main heading */
 .hotel-hero__heading {
     color: #f6efe6;
     font-size: 2.4rem;
     margin: 0;
 }
 
+/* Hero description / subtitle */
 .hotel-hero__desc {
     font-size: 1.2rem;
     line-height: 2;
@@ -187,10 +196,12 @@
     margin: 0;
 }
 
+/* CTA wrapper in hero */
 .hotel-hero__cta {
     margin-top: 12px;
 }
 
+/* Primary CTA button style */
 .hotel-cta-btn {
     text-decoration: none;
     color: #083b2b;
@@ -202,11 +213,13 @@
     box-shadow: 0 6px 18px rgba(6, 40, 26, 0.25);
 }
 
+/* Logo/image column inside the hero */
 .hotel-hero__logo {
     flex: 1;
     padding: 20px;
 }
 
+/* Styling for the hero logo image */
 .hotel-hero__logo img {
     max-width: 60%;
     height: auto;
@@ -217,7 +230,7 @@
 }
 
 
-/* Hotels list placeholder */
+/* Hotels list / content area below the hero */
 .hotel-list {
     padding: 40px 60px;
     background: linear-gradient(180deg, #052a20, #083b2b);
@@ -225,7 +238,7 @@
     color: #efe9dd;
 }
 
-/* small touches */
+/* Small visual tweaks for polish */
 .hotel-logo { letter-spacing: 0.6px; }
 .hotel-hero__heading { letter-spacing: 0.4px; }
 .hotel-button:hover { background: rgba(202,168,59,0.06); }
