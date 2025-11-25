@@ -10,17 +10,17 @@ app.use(express.urlencoded({ extended: true }));
 const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
 
-// Register - expects { username, email, password }
+// Register - expects { username, email, password, user_type }
 app.post('/register', async (req, res) => {
-	const { username, email, password } = req.body;
-	if (!username || !email || !password) return res.status(400).json({ error: 'Missing fields' });
+	const { username, email, password, user_type } = req.body;
+	if (!username || !email || !password || !user_type) return res.status(400).json({ error: 'Missing fields' });
 
 	try {
 		const hashed_password = await bcrypt.hash(password, 10);
-		await db.query('INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)', [username, email, hashed_password]);
+		await db.query('INSERT INTO users (name, email, password_hash, user_type) VALUES (?, ?, ?, ?)', [username, email, hashed_password, user_type]);
 		return res.json({ message: 'User registered' });
 	} 
-  catch (err) {
+    catch (err) {
 		if (err && err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: 'Email already registered' });
 		console.error('Register error', err);
 		return res.status(500).json({ error: 'Failed to register' });
