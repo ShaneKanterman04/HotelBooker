@@ -9,6 +9,7 @@
 <body>
   <main class="card">
     <h1>Create account</h1>
+
     <form id="registerForm">
       <label>
         Username
@@ -22,8 +23,17 @@
         Password
         <input type="password" name="password" required minlength="6" />
       </label>
+
+      <label for="account_type">Account Type</label>
+      <select name="account_type" id="account_type">
+        <option value="regular">Regular User</option>
+        <option value="owner">Hotel Owner</option>
+      </select>
+
+
       <button type="submit">Register</button>
     </form>
+
     <p class="muted">Already have an account? <a href="login.html">Log in</a></p>
     <div id="message" role="status"></div>
   </main>
