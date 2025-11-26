@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Southern Swap</title>
+  <title>Hotel Booker</title>
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" crossorigin="anonymous"/>
   <link href="https://fonts.googleapis.com/css2?family=Aleo:wght@400;700&display=swap" rel="stylesheet">
@@ -22,11 +22,19 @@
         </div>
 
         <ul class="hotel-menu">
-          <!-- Login and register buttons -->
-          <li class="hotel-menu__btn">
+          <!-- User info (shown when logged in) -->
+          <li id="userInfo" style="display: none; color: white; margin-right: 20px;">
+            Welcome, <span id="userName"></span>!
+          </li>
+          <!-- Logout button (shown when logged in) -->
+          <li class="hotel-menu__btn" id="logoutBtn" style="display: none;">
+            <a href="#" class="hotel-button" onclick="handleLogout(event)">Logout</a>
+          </li>
+          <!-- Login and register buttons (shown when logged out) -->
+          <li class="hotel-menu__btn" id="loginBtn">
             <a href="login.html" class="hotel-button">Login</a>
           </li>
-          <li class="hotel-menu__btn">
+          <li class="hotel-menu__btn" id="registerBtn">
             <a href="register.html" class="hotel-button">Register</a>
           </li>
         </ul>
@@ -54,6 +62,6 @@
   </section>
 
   <!-- JS Script -->
-  <script src="js/scripts.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
