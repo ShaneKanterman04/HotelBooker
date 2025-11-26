@@ -12,7 +12,9 @@ app.use(express.static(publicDir));
 
 // Register - expects { username, email, password, user_type }
 app.post('/register', async (req, res) => {
+	console.log('Received registration data:', req.body);
 	const { username, email, password, user_type } = req.body;
+	console.log('Extracted fields:', { username, email, password: password ? '***' : undefined, user_type });
 	if (!username || !email || !password || !user_type) return res.status(400).json({ error: 'Missing fields' });
 
 	try {
