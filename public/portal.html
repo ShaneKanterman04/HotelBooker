@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Portal - Hotel Booker</title>
+  <link rel="stylesheet" href="css/portal.css">
+</head>
+
+
+<body>
+  <!-- Main portal container -->
+  <div class="portal-container">
+        <div class="portal-header">
+            <h1>Owner Portal</h1>
+            <a href="/" class="back-btn">← Back to Home</a>
+        </div>
+
+        <!-- Menu: Choose between Add Hotel or Add Room -->
+        <div id="menuView" class="menu-view">
+
+            <h2>What would you like to do?</h2>
+
+            <div class="option-cards">
+                <div class="option-card" onclick="showAddHotelForm()">
+                    <div class="option-icon">🏨</div>
+                    <h3>Add Hotel</h3>
+                    <p>Register a new hotel property</p>
+                </div>
+
+                <div class="option-card" onclick="showAddRoomForm()">
+                    <div class="option-icon">🛏️</div>
+                    <h3>Add Room</h3>
+                    <p>Add a room to an existing hotel</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Hotel Form -->
+        <div id="addHotelForm" class="form-view" style="display: none;">
+
+            <button class="back-btn" onclick="showMenu()">← Back to Menu</button>
+            <div class="card">
+                <h2>Add New Hotel</h2>
+                <form id="hotelForm">
+                    <label>
+                        Hotel Name
+                        <input type="text" name="name" required placeholder="Grand Plaza Hotel">
+                    </label>
+
+                    <label>
+                        Address
+                        <input type="text" name="address" required placeholder="123 Main Street">
+                    </label>
+
+                    <label>
+                        City
+                        <input type="text" name="city" required placeholder="New York">
+                    </label>
+
+                    <label>
+                        State/Province
+                        <input type="text" name="state" required placeholder="NY">
+                    </label>
+
+                    <label>
+                        Country
+                        <input type="text" name="country" required placeholder="USA">
+                    </label>
+
+                    <label>
+                        Postal Code
+                        <input type="text" name="postal_code" required placeholder="10001">
+                    </label>
+
+            <label>
+                Description
+                <textarea name="description" rows="4" required placeholder="Brief description of your hotel..."></textarea>
+            </label>
+
+            <label>
+                Star Rating
+                <select name="star_rating" required>
+                <option value="">Select rating</option>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+                </select>
+            </label>
+
+            <label>
+                Phone Number
+                <input type="tel" name="phone" required placeholder="+1 (555) 123-4567">
+            </label>
+
+            <label>
+                Email
+                <input type="email" name="email" required placeholder="contact@hotel.com">
+            </label>                <button type="submit">Add Hotel</button>
+                </form>
+                <div id="hotelMessage"></div>
+            </div>
+        </div>
+
+        <!-- Add Room Form -->
+        <div id="addRoomForm" class="form-view" style="display: none;">
+            <button class="back-btn" onclick="showMenu()">← Back to Menu</button>
+            <div class="card">
+                <h2>Add New Room</h2>
+                <form id="roomForm">
+                <label>
+                    Hotel
+                    <select name="hotel_id" required id="hotelSelect">
+                    <option value="">Select a hotel</option>
+                    <!-- Hotels will be loaded dynamically -->
+                    </select>
+                </label>
+
+                <label>
+                    Room Number
+                    <input type="text" name="room_number" required placeholder="101">
+                </label>
+
+                <label>
+                    Room Type
+                    <select name="room_type" required>
+                    <option value="">Select type</option>
+                    <option value="single">Single</option>
+                    <option value="double">Double</option>
+                    <option value="suite">Suite</option>
+                    <option value="deluxe">Deluxe</option>
+                    <option value="presidential">Presidential Suite</option>
+                    </select>
+                </label>
+
+                <label>
+                    Price per Night ($)
+                    <input type="number" name="price" required min="0" step="0.01" placeholder="99.99">
+                </label>
+
+                <label>
+                    Capacity (guests)
+                    <input type="number" name="capacity" required min="1" max="10" placeholder="2">
+                </label>
+
+                <label>
+                    Bed Type
+                    <input type="text" name="bed_type" required placeholder="Queen, King, Twin, etc.">
+                </label>
+
+                <label>
+                    Amenities (comma separated)
+                    <input type="text" name="amenities" required placeholder="WiFi, TV, Mini-bar, AC">
+                </label>
+
+                <label>
+                    Description
+                    <textarea name="description" rows="3" required placeholder="Room features and details..."></textarea>
+                </label>
+
+                <label class="checkbox-label">
+                    <input type="checkbox" name="is_available" checked>
+                    Available for booking
+                </label>
+
+                <button type="submit">Add Room</button>
+                </form>
+                <!-- display feedback to user after form submission -->
+                <div id="roomMessage"></div>
+            </div>
+        </div>
+    </div>
+
+  <script src="js/portal.js"></script>
+</body>
+</html>
