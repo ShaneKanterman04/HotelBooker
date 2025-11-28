@@ -100,7 +100,7 @@
                 <input type="email" name="email" required placeholder="contact@hotel.com">
             </label>                <button type="submit">Add Hotel</button>
                 </form>
-                <div id="hotelMessage"></div>
+                <div id="message"></div>
             </div>
         </div>
 
@@ -110,65 +110,71 @@
             <div class="card">
                 <h2>Add New Room</h2>
                 <form id="roomForm">
-                <label>
-                    Hotel
-                    <select name="hotel_id" required id="hotelSelect">
-                    <option value="">Select a hotel</option>
-                    <!-- Hotels will be loaded dynamically -->
-                    </select>
-                </label>
+                    <label>
+                        Hotel
+                        <select name="hotel_id" required id="hotelSelect">
+                        <option value="">Select a hotel</option>
+                        <!-- Hotels will be loaded dynamically -->
+                        </select>
+                    </label>
 
-                <label>
-                    Room Number
-                    <input type="text" name="room_number" required placeholder="101">
-                </label>
+                    <label>
+                        Room Number
+                        <input type="text" name="room_number" required placeholder="101">
+                    </label>
 
-                <label>
-                    Room Type
-                    <select name="room_type" required>
-                    <option value="">Select type</option>
-                    <option value="single">Single</option>
-                    <option value="double">Double</option>
-                    <option value="suite">Suite</option>
-                    <option value="deluxe">Deluxe</option>
-                    <option value="presidential">Presidential Suite</option>
-                    </select>
-                </label>
+                    <label>
+                        Room Type
+                        <select name="room_type" required>
+                        <option value="">Select type</option>
+                        <option value="single">Single</option>
+                        <option value="double">Double</option>
+                        <option value="suite">Suite</option>
+                        <option value="deluxe">Deluxe</option>
+                        <option value="presidential">Presidential Suite</option>
+                        </select>
+                    </label>
 
-                <label>
-                    Price per Night ($)
-                    <input type="number" name="price" required min="0" step="0.01" placeholder="99.99">
-                </label>
+                    <label>
+                        Price per Night ($)
+                        <input type="number" name="price" required min="0" step="0.01" placeholder="99.99">
+                    </label>
 
-                <label>
-                    Capacity (guests)
-                    <input type="number" name="capacity" required min="1" max="10" placeholder="2">
-                </label>
+                    <label>
+                        Capacity (guests)
+                        <input type="number" name="capacity" required min="1" max="10" placeholder="2">
+                    </label>
 
-                <label>
-                    Bed Type
-                    <input type="text" name="bed_type" required placeholder="Queen, King, Twin, etc.">
-                </label>
+                    <label>
+                        Bed Type
+                        <select name="bed_type" required>
+                        <option value="">Select bed type</option>
+                        <option value="twin">Twin</option>
+                        <option value="queen">Queen</option>
+                        <option value="king">King</option>
+                        <option value="double">Double</option>
+                        </select>
+                    </label>
 
-                <label>
-                    Amenities (comma separated)
-                    <input type="text" name="amenities" required placeholder="WiFi, TV, Mini-bar, AC">
-                </label>
+                    <label>
+                        Amenities (comma separated)
+                        <input type="text" name="amenities" required placeholder="WiFi, TV, Mini-bar, AC">
+                    </label>
 
-                <label>
-                    Description
-                    <textarea name="description" rows="3" required placeholder="Room features and details..."></textarea>
-                </label>
+                    <label>
+                        Description
+                        <textarea name="description" rows="3" required placeholder="Room features and details..."></textarea>
+                    </label>
 
-                <label class="checkbox-label">
-                    <input type="checkbox" name="is_available" checked>
-                    Available for booking
-                </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="is_available" checked>
+                        Available for booking
+                    </label>
 
-                <button type="submit">Add Room</button>
+                    <button type="submit">Add Room</button>
                 </form>
                 <!-- display feedback to user after form submission -->
-                <div id="roomMessage"></div>
+                <div id="message"></div>
             </div>
         </div>
     </div>

@@ -20,3 +20,64 @@ function showAddRoomForm() {
     document.getElementById('addHotelForm').style.display = 'none';
     document.getElementById('addRoomForm').style.display = 'block';
 }
+
+
+// Form handling logic, sends data to server and shows message
+function showMessage(msg, isError) {
+  var el = document.getElementById('message');
+  if (!el) return;
+  el.innerText = msg;
+  el.style.color = isError ? 'crimson' : 'green';
+  el.style.display = 'block';
+  el.style.padding = '10px';
+  el.style.marginTop = '15px';
+  el.style.border = '1px solid ' + (isError ? 'crimson' : 'green');
+  el.style.borderRadius = '4px';
+}
+
+async function handlePortalForm(formId, endpoint) {
+    var form = document.getElementById(formId);
+    if (!form) return "Form object not found";
+
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault(); 
+
+        // save form data
+        var form_data = new FormData(form);
+        var data = {};
+        form_data.forEach(function(value, key) {data[key] = value;});
+        
+        // Convert checkbox to boolean instead of 'on' or undefined since database expects boolean
+        data.is_available = data.is_available === 'on';
+
+        // send data to server at given endpoint
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            
+            // parse server response
+            const result = await response.json();
+
+            // handle error responses
+            if (!response.ok) {
+                console.log('Error occurred:', result.error);
+                showMessage(result.error || 'An error occurred', true);
+                return;
+            }
+
+            // show success message
+            showMessage(result.message || 'Success', false);
+            form.reset(); // Clear the form after successful submission
+
+        } catch(error) {
+            console.error('Network error:', error);
+            showMessage('ERROR: ' + error.message, true);
+        }
+    });
+}
+
+handlePortalForm('hotelForm', '/api/add-hotel');
+handlePortalForm('roomForm', '/api/add-room');
