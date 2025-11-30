@@ -92,21 +92,17 @@ app.post('/logout', (req, res) => {
 	});
 });
 
-app.post('/api/add-hotel', async (req, res) => {
+app.post('/api/add-hotel', requireAuth, requireOwner, async (req, res) => {
 	const { name, address, city, state, country, postal_code, description, star_rating, phone, email } = req.body;
 
-	// Validate required fields + user is owner
+	// Validate required fields
 	if (!name || !address || !city || !state || !country || !postal_code || !description || !star_rating || !phone || !email) {
 		return res.status(400).json({ error: 'Missing required fields' });
 	}
-	if (req.session.userType !== 'owner') {
-		return res.status(403).json({ error: 'Only hotel owners can add hotels' });
-	}
 
 	try {
-		// Use req.session.email to get the owner_id from the users table for the owner making the request
-		const owner_id = req.session.userId
-		console.log('Owner ID fetched:', owner_id);
+		// Get user id from session (user already authenticated as owner by middleware)
+		const owner_id = req.session.userId;
 
 		// Insert new hotel into hotels table
 		await db.query('INSERT INTO hotels (hotel_name, owner_id, address, city, state, country, postal_code, description, star_rating, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
@@ -117,6 +113,23 @@ app.post('/api/add-hotel', async (req, res) => {
 		if (err && err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: 'Hotel name already exists' });
 		console.error('Failed to add hotel', err);
 		return res.status(500).json({ error: 'Failed to add hotel' });
+	}
+});
+
+app.post('/api/add-room', requireAuth, requireOwner, async (req, res) => {
+	const { hotel_id, room_number, type, price_per_night, is_available } = req.body;
+});
+
+app.get('/api/owner-hotels', requireAuth, requireOwner, async (req, res) => {
+	// Endpoint to get hotels owned by logged-in owner
+	try {
+		const owner_id = req.session.userId;
+		const [hotels] = await db.query('SELECT * FROM hotels WHERE owner_id = ?', [owner_id]);
+		res.json({ myHotels: hotels });
+
+	} catch (err) {
+		console.error('Failed to fetch owner hotels', err);
+		return res.status(500).json({ error: 'Failed to fetch hotels' });
 	}
 });
 
@@ -135,7 +148,6 @@ app.get('/api/check-auth', (req, res) => {
 	}
 	res.json({ loggedIn: false });
 });
-
 
 app.get('/', (req, res) => res.sendFile(path.join(publicDir, 'main.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(publicDir, 'login.html')));

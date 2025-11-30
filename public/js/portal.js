@@ -19,6 +19,9 @@ function showAddRoomForm() {
     document.getElementById('menuView').style.display = 'none';
     document.getElementById('addHotelForm').style.display = 'none';
     document.getElementById('addRoomForm').style.display = 'block';
+    
+    // Refresh hotel list every time form is opened
+    populateHotelDropdown();
 }
 
 
@@ -46,8 +49,6 @@ async function handlePortalForm(formId, endpoint) {
         var form_data = new FormData(form);
         var data = {};
         form_data.forEach(function(value, key) {data[key] = value;});
-
-        console.log('Form data being sent:', data);
         
         // Convert checkbox to boolean instead of 'on' or undefined since database expects boolean, applies only to room form
         if (formId === 'roomForm')
@@ -73,7 +74,7 @@ async function handlePortalForm(formId, endpoint) {
 
             // show success message
             showMessage(result.message || 'Success', false);
-            form.reset(); // Clear the form after successful submission
+            form.reset(); 
 
         } catch(error) {
             console.error('Network error:', error);
@@ -84,3 +85,31 @@ async function handlePortalForm(formId, endpoint) {
 
 handlePortalForm('hotelForm', '/api/add-hotel');
 handlePortalForm('roomForm', '/api/add-room');
+
+// Populate hotel dropdown in add room form
+async function populateHotelDropdown() {
+    try {
+        const response = await fetch('/api/owner-hotels');
+        const result = await response.json();
+
+        if (!response.ok) {
+            console.error('Error fetching owner hotels:', result.error);
+            return;
+        }
+
+        // Clear exsisting options, to avoid duplicates
+        const hotelSelect = document.getElementById('hotelSelect');
+        hotelSelect.innerHTML = '<option value="">Select a hotel</option>';
+        
+        // Loop through each hotel object and add each hotel as an option
+        result.myHotels.forEach(function(hotel) {
+            const option = document.createElement('option');
+            option.value = hotel.id;
+            option.textContent = hotel.hotel_name;
+            hotelSelect.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Error fetching owner hotels:', error);
+    }
+}
