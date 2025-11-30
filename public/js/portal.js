@@ -46,9 +46,12 @@ async function handlePortalForm(formId, endpoint) {
         var form_data = new FormData(form);
         var data = {};
         form_data.forEach(function(value, key) {data[key] = value;});
+
+        console.log('Form data being sent:', data);
         
-        // Convert checkbox to boolean instead of 'on' or undefined since database expects boolean
-        data.is_available = data.is_available === 'on';
+        // Convert checkbox to boolean instead of 'on' or undefined since database expects boolean, applies only to room form
+        if (formId === 'roomForm')
+            data.is_available = data.is_available === 'on';
 
         // send data to server at given endpoint
         try {

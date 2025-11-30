@@ -45,8 +45,8 @@ app.post('/register', async (req, res) => {
 		const hashed_password = await bcrypt.hash(password, 10);
 		await db.query('INSERT INTO users (name, email, password_hash, user_type) VALUES (?, ?, ?, ?)', [username, email, hashed_password, user_type]);
 		return res.json({ message: 'User registered' });
-	} 
-    catch (err) {
+
+	} catch (err) {
 		if (err && err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: 'Email already registered' });
 		console.error('Register error', err);
 		return res.status(500).json({ error: 'Failed to register' });
@@ -92,6 +92,34 @@ app.post('/logout', (req, res) => {
 	});
 });
 
+app.post('/api/add-hotel', async (req, res) => {
+	const { name, address, city, state, country, postal_code, description, star_rating, phone, email } = req.body;
+
+	// Validate required fields + user is owner
+	if (!name || !address || !city || !state || !country || !postal_code || !description || !star_rating || !phone || !email) {
+		return res.status(400).json({ error: 'Missing required fields' });
+	}
+	if (req.session.userType !== 'owner') {
+		return res.status(403).json({ error: 'Only hotel owners can add hotels' });
+	}
+
+	try {
+		// Use req.session.email to get the owner_id from the users table for the owner making the request
+		const owner_id = req.session.userId
+		console.log('Owner ID fetched:', owner_id);
+
+		// Insert new hotel into hotels table
+		await db.query('INSERT INTO hotels (hotel_name, owner_id, address, city, state, country, postal_code, description, star_rating, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+			[name, owner_id, address, city, state, country, postal_code, description, star_rating, phone, email]);
+		return res.json({ message: 'Hotel added successfully' });
+
+	} catch (err) {
+		if (err && err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: 'Hotel name already exists' });
+		console.error('Failed to add hotel', err);
+		return res.status(500).json({ error: 'Failed to add hotel' });
+	}
+});
+
 app.get('/api/check-auth', (req, res) => {
 	// API endpoint to check login status
 	if (req.session.userId) {
@@ -107,6 +135,7 @@ app.get('/api/check-auth', (req, res) => {
 	}
 	res.json({ loggedIn: false });
 });
+
 
 app.get('/', (req, res) => res.sendFile(path.join(publicDir, 'main.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(publicDir, 'login.html')));
