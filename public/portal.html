@@ -100,7 +100,7 @@
                 <input type="email" name="email" required placeholder="contact@hotel.com">
             </label>                <button type="submit">Add Hotel</button>
                 </form>
-                <div id="message"></div>
+                <div id="hotelMessage"></div>
             </div>
         </div>
 
@@ -114,7 +114,7 @@
                         Hotel
                         <select name="hotel_id" required id="hotelSelect">
                         <option value="">Select a hotel</option>
-                        <!-- Hotels will be loaded dynamically -->
+                        <!-- Hotels will be loaded dynamically by populateHotelDropdown() -->
                         </select>
                     </label>
 
@@ -174,7 +174,7 @@
                     <button type="submit">Add Room</button>
                 </form>
                 <!-- display feedback to user after form submission -->
-                <div id="message"></div>
+                <div id="roomMessage"></div>
             </div>
         </div>
     </div>

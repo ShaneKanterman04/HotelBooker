@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- Create hotels table
 CREATE TABLE IF NOT EXISTS hotels (
     id              INT AUTO_INCREMENT PRIMARY KEY,
-    hotel_name      VARCHAR(225) NOT NULL UNIQUE,
+    hotel_name      VARCHAR(225) NOT NULL,
     owner_id        INT,
     address         VARCHAR(255) NOT NULL,
     city            VARCHAR(100) NOT NULL,
@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS hotels (
     phone_number    VARCHAR(20),
     email           VARCHAR(100),
 
-    FOREIGN key (owner_id) REFERENCES users(id)
+    FOREIGN key (owner_id) REFERENCES users(id),
+    UNIQUE (hotel_name, owner_id)
 );
 
 -- Create rooms table
@@ -37,12 +38,13 @@ CREATE TABLE IF NOT EXISTS rooms (
     room_type       VARCHAR(100) NOT NULL,
     price_per_night DECIMAL(10, 2) NOT NULL,
     capacity        INT NOT NULL,
-    bed_type        ENUM('single', 'double', 'queen', 'king') NOT NULL,
+    bed_type        ENUM('twin', 'single', 'double', 'queen', 'king') NOT NULL,
     amenities       TEXT,
     description     TEXT,
     availability    BOOLEAN DEFAULT TRUE,
 
-    FOREIGN KEY (hotel_id) REFERENCES hotels(id) 
+    FOREIGN KEY (hotel_id) REFERENCES hotels(id),
+    UNIQUE (hotel_id, room_number)
 );
 
 

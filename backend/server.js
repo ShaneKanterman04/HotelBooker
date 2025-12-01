@@ -117,7 +117,23 @@ app.post('/api/add-hotel', requireAuth, requireOwner, async (req, res) => {
 });
 
 app.post('/api/add-room', requireAuth, requireOwner, async (req, res) => {
-	const { hotel_id, room_number, type, price_per_night, is_available } = req.body;
+	const { hotel_id, room_number, room_type, price, capacity, bed_type, amenities, description, is_available } = req.body;
+	// Validate required fields
+	if (!hotel_id || !room_number || !room_type || !price || !capacity || !bed_type || !amenities || !description || is_available === undefined) {
+		return res.status(400).json({ error: 'Missing required fields' });
+	}
+
+	// send data to database
+	try {
+		await db.query('INSERT INTO rooms (hotel_id, room_number, room_type, price_per_night, capacity, bed_type, amenities, description, availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+			[hotel_id, room_number, room_type, price, capacity, bed_type, amenities, description, is_available]);
+		return res.json({ message: 'Room added successfully' });
+
+	} catch (err) {
+		if (err && err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: 'Room number already exists for this hotel' });
+		console.error('Failed to add room', err);
+		return res.status(500).json({ error: 'Failed to add room' });
+	}
 });
 
 app.get('/api/owner-hotels', requireAuth, requireOwner, async (req, res) => {

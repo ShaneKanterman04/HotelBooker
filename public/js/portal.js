@@ -26,8 +26,9 @@ function showAddRoomForm() {
 
 
 // Form handling logic, sends data to server and shows message
-function showMessage(msg, isError) {
-  var el = document.getElementById('message');
+function showMessage(msg, isError, formId) {
+  var messageId = formId === 'hotelForm' ? 'hotelMessage' : 'roomMessage';
+  var el = document.getElementById(messageId);
   if (!el) return;
   el.innerText = msg;
   el.style.color = isError ? 'crimson' : 'green';
@@ -68,12 +69,12 @@ async function handlePortalForm(formId, endpoint) {
             // handle error responses
             if (!response.ok) {
                 console.log('Error occurred:', result.error);
-                showMessage(result.error || 'An error occurred', true);
+                showMessage(result.error || 'An error occurred', true, formId);
                 return;
             }
 
             // show success message
-            showMessage(result.message || 'Success', false);
+            showMessage(result.message || 'Success', false, formId);
             form.reset(); 
 
         } catch(error) {
@@ -104,6 +105,7 @@ async function populateHotelDropdown() {
         // Loop through each hotel object and add each hotel as an option
         result.myHotels.forEach(function(hotel) {
             const option = document.createElement('option');
+            // When the user selects a hotel, the value will be the hotel ID
             option.value = hotel.id;
             option.textContent = hotel.hotel_name;
             hotelSelect.appendChild(option);
