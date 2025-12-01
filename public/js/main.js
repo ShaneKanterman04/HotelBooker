@@ -49,3 +49,42 @@ async function handleLogout(event) {
 
 // Check auth when page loads, DOMContentLoaded ensures DOM is ready
 document.addEventListener('DOMContentLoaded', checkAuth);
+
+
+// Logic to display hotels on main page
+async function displayHotels() {
+    try {
+        const response = await fetch('/api/hotels');
+        const result = await response.json();
+
+        if (!response.ok) {
+            console.error('Error fetching hotels:', result.error);
+            return;
+        }
+
+        const hotelListContainer = document.getElementById('hotelListContainer');
+        hotelListContainer.innerHTML = ''; // Clear existing hotels
+
+        result.hotels.forEach(function(hotel) {
+            const hotelCard = document.createElement('div');
+            hotelCard.className = 'hotel-card';
+            
+            // Create star rating display
+            const stars = '⭐'.repeat(hotel.star_rating || 0);
+
+            hotelCard.innerHTML = `
+                <h3>${hotel.hotel_name}</h3>
+                <p class="stars">${stars}</p>
+                <p class="location">📍 ${hotel.city}, ${hotel.country}</p>
+                <a href="hotel.html?id=${hotel.id}" class="view-hotel-btn">View Hotel</a>
+            `;
+            
+            hotelListContainer.appendChild(hotelCard);
+        });
+    } catch (error) {
+        console.error('Error displaying hotels:', error);
+    }
+}
+
+// Call displayHotels when page loads
+document.addEventListener('DOMContentLoaded', displayHotels);

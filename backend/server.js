@@ -149,6 +149,18 @@ app.get('/api/owner-hotels', requireAuth, requireOwner, async (req, res) => {
 	}
 });
 
+app.get('/api/hotels', async (req, res) => {
+	// Endpoint to get all hotels to display on main page
+	try {
+		const [hotels] = await db.query('SELECT * FROM hotels');
+		res.json({ hotels: hotels });
+
+	} catch (err) {
+		console.error('Failed to fetch hotels', err);
+		return res.status(500).json({ error: 'Failed to fetch hotels' });
+	}
+});
+
 app.get('/api/check-auth', (req, res) => {
 	// API endpoint to check login status
 	if (req.session.userId) {
