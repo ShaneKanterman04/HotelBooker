@@ -1,0 +1,268 @@
+:root {
+  --bg: #f0f8f4;
+  --card: #ffffff;
+  --accent: #0b6b45;
+  --accent-hover: #095a39;
+  --muted: #59605f;
+  --border: #e6e9ef;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #111111;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 20px;
+}
+
+/* Portal Container */
+.portal-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Header */
+.portal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border);
+}
+
+.portal-header h1 {
+  margin: 0;
+  font-size: 32px;
+  color: var(--accent);
+}
+
+.back-btn {
+  background: var(--card);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* Menu View */
+.menu-view {
+  text-align: center;
+}
+
+.menu-view h2 {
+  font-size: 24px;
+  margin-bottom: 40px;
+  color: #222;
+}
+
+.option-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.option-card {
+  background: var(--card);
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(16, 24, 40, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+}
+
+.option-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(11, 107, 69, 0.15);
+  border-color: var(--accent);
+}
+
+.option-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.option-card h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  color: var(--accent);
+}
+
+.option-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Form View */
+.form-view {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-view .back-btn {
+  margin-bottom: 20px;
+}
+
+.card {
+  background: var(--card);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 30px rgba(16, 24, 40, 0.08);
+}
+
+.card h2 {
+  margin: 0 0 24px;
+  font-size: 24px;
+  color: var(--accent);
+}
+
+/* Form Styles */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  gap: 6px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #ffffff;
+  color: inherit;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(11, 107, 69, 0.1);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+select {
+  cursor: pointer;
+}
+
+/* Checkbox Label */
+.checkbox-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Submit Button */
+button[type="submit"] {
+  background: var(--accent);
+  color: #ffffff;
+  padding: 14px;
+  border-radius: 8px;
+  border: 0;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+  background: var(--accent-hover);
+}
+
+button[type="submit"]:focus {
+  outline: 3px solid rgba(11, 107, 69, 0.15);
+  outline-offset: 2px;
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Message Display */
+#hotelMessage,
+#roomMessage {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: none;
+}
+
+#hotelMessage.success,
+#roomMessage.success {
+  display: block;
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+#hotelMessage.error,
+#roomMessage.error {
+  display: block;
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .portal-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .option-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 24px;
+  }
+}
