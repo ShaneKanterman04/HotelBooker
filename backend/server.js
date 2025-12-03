@@ -136,11 +136,74 @@ app.post('/api/add-room', requireAuth, requireOwner, async (req, res) => {
 	}
 });
 
+app.post('/api/delete-requests', requireAuth, requireOwner, async (req, res) => {
+	const { hotelIds, roomIds } = req.body;
+	
+	if (!Array.isArray(hotelIds) || !Array.isArray(roomIds)) {
+		return res.status(400).json({ success: false, message: 'Invalid request format' });
+	}
+	if (hotelIds.length === 0 && roomIds.length === 0) {
+		return res.status(400).json({ success: false, message: 'No items selected for deletion' });
+	}
+	
+	const userId = req.session.userId;
+	
+	try {
+		let deletedHotels = 0;
+		let deletedRooms = 0;
+		
+		// Delete hotels and their rooms
+		if (hotelIds.length > 0) {
+			for (const hotelId of hotelIds) {
+				// Delete all rooms belonging to this hotel
+				await db.query('DELETE FROM rooms WHERE hotel_id = ?', [hotelId]);
+				
+				// Delete the hotel itself
+				const [result] = await db.query('DELETE FROM hotels WHERE id = ? AND owner_id = ?', [hotelId, userId]);
+				deletedHotels += result.affectedRows;
+			}
+		}
+		
+		// Delete individual rooms
+		if (roomIds.length > 0) {
+			for (const roomId of roomIds) {
+				// Check if room still exists (it may have been deleted with its hotel)
+				const [roomCheck] = await db.query('SELECT id FROM rooms WHERE id = ?', [roomId]);
+				
+				if (roomCheck.length > 0) {
+					// Room still exists, verify ownership through hotel and delete
+					const [result] = await db.query(
+						'DELETE rooms FROM rooms INNER JOIN hotels ON rooms.hotel_id = hotels.id WHERE rooms.id = ? AND hotels.owner_id = ?',
+						[roomId, userId]
+					);
+					deletedRooms += result.affectedRows;
+				}
+			}
+		}
+		return res.json({ 
+			success: true, 
+			message: `Successfully deleted ${deletedHotels} hotel(s) and ${deletedRooms} room(s)`,
+			deletedHotels,
+			deletedRooms
+		});
+		
+	} catch (err) {
+		console.error('Bulk delete error:', err);
+		return res.status(500).json({ success: false, message: 'Failed to delete items' });
+	}
+});
+
 app.get('/api/owner-hotels', requireAuth, requireOwner, async (req, res) => {
 	// Endpoint to get hotels owned by logged-in owner
 	try {
 		const owner_id = req.session.userId;
 		const [hotels] = await db.query('SELECT * FROM hotels WHERE owner_id = ?', [owner_id]);
+
+		// For each hotel, get its rooms and add it to the hotel object
+		for (let hotel of hotels) {
+			const [rooms] = await db.query('SELECT * FROM rooms WHERE hotel_id = ?', [hotel.id]);
+			hotel.rooms = rooms;
+		}
 		res.json({ myHotels: hotels });
 
 	} catch (err) {

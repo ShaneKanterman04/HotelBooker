@@ -9,8 +9,8 @@
 
 
 <body>
-  <!-- Main portal container -->
-  <div class="portal-container">
+    <!-- Main portal container -->
+    <div class="portal-container">
         <div class="portal-header">
             <h1>Owner Portal</h1>
             <a href="/" class="back-btn">← Back to Home</a>
@@ -32,6 +32,12 @@
                     <div class="option-icon">🛏️</div>
                     <h3>Add Room</h3>
                     <p>Add a room to an existing hotel</p>
+                </div>
+
+                <div class="option-card" onclick="showHotelManagement()">
+                    <div class="option-icon">📋</div>
+                    <h3>View Hotels & Rooms</h3>
+                    <p>Manage your hotels and rooms</p>
                 </div>
             </div>
         </div>
@@ -175,6 +181,49 @@
                 </form>
                 <!-- display feedback to user after form submission -->
                 <div id="roomMessage"></div>
+            </div>
+        </div>
+
+        <!-- Hotel Management View -->
+        <div id="hotelManagementView" class="form-view" style="display: none;">
+            <button class="back-btn" onclick="showMenu()">← Back to Menu</button>
+
+            <div class="management-container">
+                <div class="card">
+                    <h2>Your Hotels & Rooms</h2>
+                    <p>Select items to delete and click the remove button</p>
+
+                    <div id="managementContainer">
+                        <!-- Hotels and rooms will be dynamically loaded here -->
+                         
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Remove Selected Items</h2>
+                    <p>Delete selected hotels and rooms</p>
+
+                    <!-- Checkboxes to select all hotels or rooms -->
+                    <label class="checkbox-label management-select-all">
+                        <input type="checkbox" id="selectAllHotels" onchange="toggleSelectAll('hotel')">
+                        <span>Select all hotels</span>
+                    </label>
+                    <label class="checkbox-label management-select-all">
+                        <input type="checkbox" id="selectAllRooms" onchange="toggleSelectAll('room')">
+                        <span>Select all rooms</span>
+                    </label>
+
+                    <!-- Display number of selected hotels and rooms -->
+                    <div id="deleteStats">
+                        <p>Selected: <strong id="selectedHotelsCount">0</strong> hotels, <strong id="selectedRoomsCount">0</strong> rooms</p>
+                    </div>
+
+                    <button type="button" id="bulkDeleteBtn" onclick="processDeleteRequest()" class="delete-btn" disabled>
+                        🗑️ Delete Selected Items
+                    </button>
+                    
+                    <div id="deleteMessage"></div>
+                </div>
             </div>
         </div>
     </div>
