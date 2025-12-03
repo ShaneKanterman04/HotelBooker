@@ -36,12 +36,20 @@ HotelBooker/
 ├── public/
 │   ├── login.html         # Login page
 │   ├── register.html      # Registration page
-│   ├── main.html          # Landing page
-│   ├── success.html       # Success page after login
-│   ├── css/               # Stylesheets
+│   ├── main.html          # Main hotel listing page
+│   ├── portal.html        # Owner portal for hotel management
+│   ├── booking.html       # Room booking page
+│   ├── css/
+│   │   ├── main.css           # Main page styles
+│   │   ├── portal.css         # Owner portal styles
+│   │   ├── booking.css        # Booking page styles
+│   │   └── register-login.css # Auth pages styles
 │   └── js/
-│       └── client.js      # Client-side form handling
-├── hotel_booker.sql       # Database schema
+│       ├── client.js      # Client-side form handling (auth)
+│       ├── main.js        # Main page logic (hotel display, sorting)
+│       ├── portal.js      # Owner portal logic (add/delete hotels/rooms)
+│       └── booking.js     # Booking page logic (room selection, price calculation)
+├── hotel_booker.sql       # Database schema (users, hotels, rooms, bookings)
 └── README.md
 ```
  
