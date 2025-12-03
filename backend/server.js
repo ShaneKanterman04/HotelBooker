@@ -224,6 +224,74 @@ app.get('/api/hotels', async (req, res) => {
 	}
 });
 
+app.get('/api/hotel/:id', async (req, res) => {
+	// Endpoint to get a specific hotel with its rooms for booking page
+	try {
+		const hotelId = req.params.id;
+		const [hotels] = await db.query('SELECT * FROM hotels WHERE id = ?', [hotelId]);
+
+		if (hotels.length === 0) {
+			return res.status(404).json({ error: 'Hotel not found' });
+		}
+
+		const hotel = hotels[0];
+		const [rooms] = await db.query('SELECT * FROM rooms WHERE hotel_id = ?', [hotelId]);
+		hotel.rooms = rooms;
+
+		res.json({ hotel: hotel });
+
+	} catch (err) {
+		console.error('Failed to fetch hotel', err);
+		return res.status(500).json({ error: 'Failed to fetch hotel' });
+	}
+});
+
+app.post('/api/book-room', requireAuth, async (req, res) => {
+	// Endpoint to book a room
+	const { room_id, check_in, check_out } = req.body;
+
+	if (!room_id || !check_in || !check_out) {
+		return res.status(400).json({ error: 'Missing required fields' });
+	}
+
+	// Validate dates
+	const checkInDate = new Date(check_in);
+	const checkOutDate = new Date(check_out);
+	if (checkOutDate <= checkInDate) {
+		return res.status(400).json({ error: 'Check-out date must be after check-in date' });
+	}
+
+	try {
+		const user_id = req.session.userId;
+
+		// Check if room exists and is available
+		const [rooms] = await db.query('SELECT * FROM rooms WHERE id = ?', [room_id]);
+		if (rooms.length === 0) {
+			return res.status(404).json({ error: 'Room not found' });
+		}
+		if (!rooms[0].availability) {
+			return res.status(400).json({ error: 'Room is not available' });
+		}
+
+		// Calculate total price
+		const room = rooms[0];
+		const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+		const totalPrice = room.price_per_night * nights;
+
+		// Insert booking
+		await db.query(
+			'INSERT INTO bookings (user_id, room_id, check_in_date, check_out_date, status, total_price) VALUES (?, ?, ?, ?, ?, ?)',
+			[user_id, room_id, check_in, check_out, 'confirmed', totalPrice]
+		);
+
+		return res.json({ message: 'Room booked successfully!' });
+
+	} catch (err) {
+		console.error('Failed to book room', err);
+		return res.status(500).json({ error: 'Failed to book room' });
+	}
+});
+
 app.get('/api/check-auth', (req, res) => {
 	// API endpoint to check login status
 	if (req.session.userId) {

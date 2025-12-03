@@ -47,4 +47,19 @@ CREATE TABLE IF NOT EXISTS rooms (
     UNIQUE (hotel_id, room_number)
 );
 
+-- Create bookings table
+CREATE TABLE IF NOT EXISTS bookings (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    user_id         INT NOT NULL,
+    room_id         INT NOT NULL,
+    check_in_date   DATE NOT NULL,
+    check_out_date  DATE NOT NULL,
+    status          ENUM('confirmed', 'cancelled', 'completed') DEFAULT 'confirmed',
+    total_price     DECIMAL(10, 2),
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (room_id) REFERENCES rooms(id)
+);
+
 
