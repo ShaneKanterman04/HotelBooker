@@ -76,7 +76,7 @@ async function displayHotels() {
                 <h3>${hotel.hotel_name}</h3>
                 <p class="stars">${stars}</p>
                 <p class="location">📍 ${hotel.city}, ${hotel.country}</p>
-                <a href="hotel.html?id=${hotel.id}" class="view-hotel-btn">View Hotel</a>
+                <a href="booking.html?id=${hotel.id}" class="view-hotel-btn">View Hotel</a>
             `;
             
             hotelListContainer.appendChild(hotelCard);
