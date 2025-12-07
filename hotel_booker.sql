@@ -62,4 +62,14 @@ CREATE TABLE IF NOT EXISTS bookings (
     FOREIGN KEY (room_id) REFERENCES rooms(id)
 );
 
+-- Create favorites table
+CREATE TABLE IF NOT EXISTS favorites (
+    user_id INT NOT NULL,
+    hotel_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, hotel_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (hotel_id) REFERENCES hotels(id) ON DELETE CASCADE
+);
+
 

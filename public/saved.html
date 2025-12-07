@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved Hotels - Hotel Booker</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=Aleo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar Section -->
+    <nav class="hotel-nav">
+      <div class="hotel-nav__container">
+        <a href="/" class="hotel-logo">HOTEL <br> BOOKER</a>
+
+        <div class="hotel-menu-toggle" id="hotelMenuToggle">
+          <span class="toggle-bar"></span>
+          <span class="toggle-bar"></span>
+          <span class="toggle-bar"></span>
+        </div>
+
+        <ul class="hotel-menu">
+          <!-- User info (shown when logged in) -->
+          <li id="userInfo" style="display: none; color: white; margin-right: 20px;">
+            Welcome, <span id="userName"></span>!
+          </li>
+          <!-- Saved Hotels (shown when logged in) -->
+          <li class="hotel-menu__btn" id="savedBtn" style="display: none;">
+            <a href="/saved" class="hotel-button" style="background: rgba(255,255,255,0.1);">Saved</a>
+          </li>
+          <!-- Logout button (shown when logged in) -->
+          <li class="hotel-menu__btn" id="logoutBtn" style="display: none;">
+            <a href="#" class="hotel-button" onclick="handleLogout(event)">Logout</a>
+          </li>
+          <!-- Portal (when user is a hotel owner) -->
+          <li class="hotel-menu__btn" id="portalBtn" style="display: none;">
+            <a href="portal.html" class="hotel-button">Portal</a>
+          </li>
+          <!-- Login and register buttons (shown when logged out) -->
+          <li class="hotel-menu__btn" id="loginBtn">
+            <a href="login.html" class="hotel-button">Login</a>
+          </li>
+          <li class="hotel-menu__btn" id="registerBtn">
+            <a href="register.html" class="hotel-button">Register</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+  <!-- Saved Hotels Section -->
+  <section class="hotel-list" style="min-height: 80vh;">
+    <h2 style="text-align: center; margin-bottom: 30px; font-size: 2rem;">Your Saved Hotels</h2>
+    <div id="hotelListContainer">
+        <!-- Saved hotels will be loaded here -->
+        <p style="text-align: center; grid-column: 1/-1;">Loading saved hotels...</p>
+    </div>
+  </section>
+
+  <script src="js/main.js"></script>
+  <script src="js/saved.js"></script>
+</body>
+</html>

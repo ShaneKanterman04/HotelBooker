@@ -327,7 +327,61 @@ app.get('/api/check-auth', (req, res) => {
 	res.json({ loggedIn: false });
 });
 
+app.post('/api/favorites/toggle', requireAuth, async (req, res) => {
+	const { hotel_id } = req.body;
+	const user_id = req.session.userId;
+
+	if (!hotel_id) return res.status(400).json({ error: 'Missing hotel_id' });
+
+	try {
+		// Check if favorite exists
+		const [rows] = await db.query('SELECT * FROM favorites WHERE user_id = ? AND hotel_id = ?', [user_id, hotel_id]);
+
+		if (rows.length > 0) {
+			// Remove favorite
+			await db.query('DELETE FROM favorites WHERE user_id = ? AND hotel_id = ?', [user_id, hotel_id]);
+			res.json({ message: 'Removed from favorites', isFavorite: false });
+		} else {
+			// Add favorite
+			await db.query('INSERT INTO favorites (user_id, hotel_id) VALUES (?, ?)', [user_id, hotel_id]);
+			res.json({ message: 'Added to favorites', isFavorite: true });
+		}
+	} catch (err) {
+		console.error('Toggle favorite error', err);
+		res.status(500).json({ error: 'Failed to toggle favorite' });
+	}
+});
+
+app.get('/api/favorites', requireAuth, async (req, res) => {
+	const user_id = req.session.userId;
+	try {
+		const [rows] = await db.query('SELECT hotel_id FROM favorites WHERE user_id = ?', [user_id]);
+		const favoriteIds = rows.map(row => row.hotel_id);
+		res.json({ favorites: favoriteIds });
+	} catch (err) {
+		console.error('Get favorites error', err);
+		res.status(500).json({ error: 'Failed to get favorites' });
+	}
+});
+
+app.get('/api/user/favorites', requireAuth, async (req, res) => {
+	const user_id = req.session.userId;
+	try {
+		const [hotels] = await db.query(`
+			SELECT h.* 
+			FROM hotels h 
+			JOIN favorites f ON h.id = f.hotel_id 
+			WHERE f.user_id = ?
+		`, [user_id]);
+		res.json({ hotels: hotels });
+	} catch (err) {
+		console.error('Get user favorites error', err);
+		res.status(500).json({ error: 'Failed to get saved hotels' });
+	}
+});
+
 app.get('/', (req, res) => res.sendFile(path.join(publicDir, 'main.html')));
+app.get('/saved', (req, res) => res.sendFile(path.join(publicDir, 'saved.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(publicDir, 'login.html')));
 app.get('/register', (req, res) => res.sendFile(path.join(publicDir, 'register.html')));
 

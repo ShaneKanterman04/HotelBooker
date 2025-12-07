@@ -9,6 +9,7 @@ async function setupDatabase() {
         console.log('Dropping existing tables...');
         await db.query('DROP TABLE IF EXISTS bookings');
         await db.query('DROP TABLE IF EXISTS rooms');
+        await db.query('DROP TABLE IF EXISTS favorites');
         await db.query('DROP TABLE IF EXISTS hotels');
         await db.query('DROP TABLE IF EXISTS users');
 
@@ -78,6 +79,19 @@ async function setupDatabase() {
                 total_price     DECIMAL(10, 2),
                 created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (room_id) REFERENCES rooms(id)
+            )
+        `);
+
+        // Create favorites table
+        console.log('Creating favorites table...');
+        await db.query(`
+            CREATE TABLE favorites (
+                user_id INT NOT NULL,
+                hotel_id INT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (user_id, hotel_id),
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                FOREIGN KEY (hotel_id) REFERENCES hotels(id) ON DELETE CASCADE
             )
         `);
 
