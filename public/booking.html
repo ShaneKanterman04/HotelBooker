@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Room - Hotel Booker</title>
+    <link rel="stylesheet" href="css/booking.css">
+</head>
+<body>
+    <div class="booking-container">
+        <!-- Header -->
+        <div class="booking-header">
+            <a href="/" class="back-btn">← Back to Hotels</a>
+            <h1 id="hotelName">Loading...</h1>
+            <div id="hotelInfo"></div>
+        </div>
+
+        <!-- Room Selection -->
+        <div class="rooms-section">
+            <h2>Available Rooms</h2>
+            <div id="roomsContainer">
+                <!-- Rooms will be dynamically loaded here -->
+            </div>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="booking-form-section">
+            <div class="card">
+                <h2>Book Your Stay</h2>
+                <form id="bookingForm">
+                    <label>
+                        Select Room
+                        <select name="room_id" id="roomSelect" required>
+                            <option value="">Choose a room</option>
+                            <!-- Rooms will be populated dynamically -->
+                        </select>
+                    </label>
+
+                    <label>
+                        Check-in Date
+                        <input type="date" name="check_in" id="checkIn" required>
+                    </label>
+
+                    <label>
+                        Check-out Date
+                        <input type="date" name="check_out" id="checkOut" required>
+                    </label>
+
+                    <div id="priceDisplay">
+                        <p>Total: <strong id="totalPrice">$0</strong></p>
+                        <p id="nightsCount"></p>
+                    </div>
+
+                    <button type="submit">Book Room</button>
+                </form>
+                <div id="bookingMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/booking.js"></script>
+</body>
+</html>

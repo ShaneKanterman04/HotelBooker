@@ -117,7 +117,80 @@ app.post('/api/add-hotel', requireAuth, requireOwner, async (req, res) => {
 });
 
 app.post('/api/add-room', requireAuth, requireOwner, async (req, res) => {
-	const { hotel_id, room_number, type, price_per_night, is_available } = req.body;
+	const { hotel_id, room_number, room_type, price, capacity, bed_type, amenities, description, is_available } = req.body;
+	// Validate required fields
+	if (!hotel_id || !room_number || !room_type || !price || !capacity || !bed_type || !amenities || !description || is_available === undefined) {
+		return res.status(400).json({ error: 'Missing required fields' });
+	}
+
+	// send data to database
+	try {
+		await db.query('INSERT INTO rooms (hotel_id, room_number, room_type, price_per_night, capacity, bed_type, amenities, description, availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+			[hotel_id, room_number, room_type, price, capacity, bed_type, amenities, description, is_available]);
+		return res.json({ message: 'Room added successfully' });
+
+	} catch (err) {
+		if (err && err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: 'Room number already exists for this hotel' });
+		console.error('Failed to add room', err);
+		return res.status(500).json({ error: 'Failed to add room' });
+	}
+});
+
+app.post('/api/delete-requests', requireAuth, requireOwner, async (req, res) => {
+	const { hotelIds, roomIds } = req.body;
+	
+	if (!Array.isArray(hotelIds) || !Array.isArray(roomIds)) {
+		return res.status(400).json({ success: false, message: 'Invalid request format' });
+	}
+	if (hotelIds.length === 0 && roomIds.length === 0) {
+		return res.status(400).json({ success: false, message: 'No items selected for deletion' });
+	}
+	
+	const userId = req.session.userId;
+	
+	try {
+		let deletedHotels = 0;
+		let deletedRooms = 0;
+		
+		// Delete hotels and their rooms
+		if (hotelIds.length > 0) {
+			for (const hotelId of hotelIds) {
+				// Delete all rooms belonging to this hotel
+				await db.query('DELETE FROM rooms WHERE hotel_id = ?', [hotelId]);
+				
+				// Delete the hotel itself
+				const [result] = await db.query('DELETE FROM hotels WHERE id = ? AND owner_id = ?', [hotelId, userId]);
+				deletedHotels += result.affectedRows;
+			}
+		}
+		
+		// Delete individual rooms
+		if (roomIds.length > 0) {
+			for (const roomId of roomIds) {
+				// Check if room still exists (it may have been deleted with its hotel)
+				const [roomCheck] = await db.query('SELECT id FROM rooms WHERE id = ?', [roomId]);
+				
+				if (roomCheck.length > 0) {
+					// Room still exists, verify ownership through hotel and delete
+					const [result] = await db.query(
+						'DELETE rooms FROM rooms INNER JOIN hotels ON rooms.hotel_id = hotels.id WHERE rooms.id = ? AND hotels.owner_id = ?',
+						[roomId, userId]
+					);
+					deletedRooms += result.affectedRows;
+				}
+			}
+		}
+		return res.json({ 
+			success: true, 
+			message: `Successfully deleted ${deletedHotels} hotel(s) and ${deletedRooms} room(s)`,
+			deletedHotels,
+			deletedRooms
+		});
+		
+	} catch (err) {
+		console.error('Bulk delete error:', err);
+		return res.status(500).json({ success: false, message: 'Failed to delete items' });
+	}
 });
 
 app.get('/api/owner-hotels', requireAuth, requireOwner, async (req, res) => {
@@ -125,11 +198,97 @@ app.get('/api/owner-hotels', requireAuth, requireOwner, async (req, res) => {
 	try {
 		const owner_id = req.session.userId;
 		const [hotels] = await db.query('SELECT * FROM hotels WHERE owner_id = ?', [owner_id]);
+
+		// For each hotel, get its rooms and add it to the hotel object
+		for (let hotel of hotels) {
+			const [rooms] = await db.query('SELECT * FROM rooms WHERE hotel_id = ?', [hotel.id]);
+			hotel.rooms = rooms;
+		}
 		res.json({ myHotels: hotels });
 
 	} catch (err) {
 		console.error('Failed to fetch owner hotels', err);
 		return res.status(500).json({ error: 'Failed to fetch hotels' });
+	}
+});
+
+app.get('/api/hotels', async (req, res) => {
+	// Endpoint to get all hotels to display on main page
+	try {
+		const [hotels] = await db.query('SELECT * FROM hotels');
+		res.json({ hotels: hotels });
+
+	} catch (err) {
+		console.error('Failed to fetch hotels', err);
+		return res.status(500).json({ error: 'Failed to fetch hotels' });
+	}
+});
+
+app.get('/api/hotel/:id', async (req, res) => {
+	// Endpoint to get a specific hotel with its rooms for booking page
+	try {
+		const hotelId = req.params.id;
+		const [hotels] = await db.query('SELECT * FROM hotels WHERE id = ?', [hotelId]);
+
+		if (hotels.length === 0) {
+			return res.status(404).json({ error: 'Hotel not found' });
+		}
+
+		const hotel = hotels[0];
+		const [rooms] = await db.query('SELECT * FROM rooms WHERE hotel_id = ?', [hotelId]);
+		hotel.rooms = rooms;
+
+		res.json({ hotel: hotel });
+
+	} catch (err) {
+		console.error('Failed to fetch hotel', err);
+		return res.status(500).json({ error: 'Failed to fetch hotel' });
+	}
+});
+
+app.post('/api/book-room', requireAuth, async (req, res) => {
+	// Endpoint to book a room
+	const { room_id, check_in, check_out } = req.body;
+
+	if (!room_id || !check_in || !check_out) {
+		return res.status(400).json({ error: 'Missing required fields' });
+	}
+
+	// Validate dates
+	const checkInDate = new Date(check_in);
+	const checkOutDate = new Date(check_out);
+	if (checkOutDate <= checkInDate) {
+		return res.status(400).json({ error: 'Check-out date must be after check-in date' });
+	}
+
+	try {
+		const user_id = req.session.userId;
+
+		// Check if room exists and is available
+		const [rooms] = await db.query('SELECT * FROM rooms WHERE id = ?', [room_id]);
+		if (rooms.length === 0) {
+			return res.status(404).json({ error: 'Room not found' });
+		}
+		if (!rooms[0].availability) {
+			return res.status(400).json({ error: 'Room is not available' });
+		}
+
+		// Calculate total price
+		const room = rooms[0];
+		const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+		const totalPrice = room.price_per_night * nights;
+
+		// Insert booking
+		await db.query(
+			'INSERT INTO bookings (user_id, room_id, check_in_date, check_out_date, status, total_price) VALUES (?, ?, ?, ?, ?, ?)',
+			[user_id, room_id, check_in, check_out, 'confirmed', totalPrice]
+		);
+
+		return res.json({ message: 'Room booked successfully!' });
+
+	} catch (err) {
+		console.error('Failed to book room', err);
+		return res.status(500).json({ error: 'Failed to book room' });
 	}
 });
 

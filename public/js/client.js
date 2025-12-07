@@ -1,5 +1,5 @@
 function showMessage(msg, isError) {
-  var el = document.getElementById('message');
+  var el = document.getElementById("message");
   if (!el) return;
   el.innerText = msg;
   el.style.color = isError ? 'crimson' : 'green';
@@ -22,8 +22,6 @@ function handleForm(formId, endpoint, successRedirect) {
     var form_data = new FormData(form);
     var data = {};
     form_data.forEach(function (value, key) { data[key] = value; });
-    
-    console.log('Form data being sent:', data);
 
     try {
       // send data to server, response holds HTTP metadata from server
@@ -32,12 +30,9 @@ function handleForm(formId, endpoint, successRedirect) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      
-      console.log('Response status:', response.status);
 
       // parse server response body as a JSON object
       const result = await response.json();
-      console.log('Response data:', result);
 
       // handle error responses
       if (!response.ok) {

@@ -1,0 +1,278 @@
+:root {
+  --bg: #f0f8f4;
+  --card: #ffffff;
+  --accent: #0b6b45;
+  --accent-hover: #095a39;
+  --muted: #59605f;
+  --border: #e6e9ef;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #111111;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 20px;
+}
+
+.booking-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.booking-header {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border);
+}
+
+.back-btn {
+  display: inline-block;
+  background: var(--card);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 20px;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: var(--accent);
+  color: white;
+}
+
+#hotelName {
+  margin: 0 0 10px;
+  font-size: 32px;
+  color: var(--accent);
+}
+
+#hotelInfo {
+  color: var(--muted);
+  font-size: 16px;
+}
+
+/* Rooms Section */
+.rooms-section {
+  margin-bottom: 40px;
+}
+
+.rooms-section h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+#roomsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.room-card {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(16, 24, 40, 0.08);
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.room-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.room-card h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: var(--accent);
+}
+
+.room-card .room-type {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  text-transform: capitalize;
+}
+
+.room-card .price {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.room-card .details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.room-card .amenities {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.room-card .availability {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.room-card .availability.available {
+  background: #d4edda;
+  color: #155724;
+}
+
+.room-card .availability.unavailable {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Booking Form */
+.booking-form-section {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 30px rgba(16, 24, 40, 0.08);
+}
+
+.card h2 {
+  margin: 0 0 24px;
+  font-size: 24px;
+  color: var(--accent);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  gap: 6px;
+}
+
+input[type="date"],
+select {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #ffffff;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(11, 107, 69, 0.1);
+}
+
+#priceDisplay {
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+#priceDisplay p {
+  margin: 4px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+#totalPrice {
+  color: var(--accent);
+  font-size: 24px;
+}
+
+#nightsCount {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+button[type="submit"] {
+  background: var(--accent);
+  color: #ffffff;
+  padding: 14px;
+  border-radius: 8px;
+  border: 0;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+  background: var(--accent-hover);
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#bookingMessage {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: none;
+}
+
+#bookingMessage.success {
+  display: block;
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+#bookingMessage.error {
+  display: block;
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #roomsContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 24px;
+  }
+}
