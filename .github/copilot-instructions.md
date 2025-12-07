@@ -1,10 +1,10 @@
 # Hotel Booker AI Instructions
 
 ## Project Overview
-Full-stack hotel booking application using Node.js, Express, MySQL, and vanilla HTML/CSS/JS.
-- **Backend**: Node.js/Express API serving static frontend files.
-- **Database**: MySQL accessed via `mysql2` with promise support.
-- **Frontend**: Vanilla JavaScript, HTML5, CSS3 (no frameworks).
+Full-stack hotel booking application.
+- **Backend**: Node.js (v14+), Express, MySQL.
+- **Frontend**: Vanilla HTML5, CSS3, JavaScript (no frameworks).
+- **Database**: MySQL with `mysql2` promise wrapper.
 
 ## Architecture & Patterns
 
@@ -18,8 +18,11 @@ Full-stack hotel booking application using Node.js, Express, MySQL, and vanilla 
 - **Authentication**:
   - `bcrypt` for password hashing.
   - `express-session` for session management (cookie-based).
-  - Middleware `requireAuth` and `requireOwner` protects routes.
-- **API Response**: Always return JSON with `message` for success or `error` for failures.
+  - **Middleware**: `requireAuth` (protected routes) and `requireOwner` (owner-only).
+  - **Session Data**: `req.session` stores `userId`, `email`, `name`, `userType`.
+- **API Response**: 
+  - Always return JSON: `{ message: "..." }` or `{ error: "..." }`.
+  - Use standard status codes: 200, 400, 401, 403, 404, 500.
 
 ### Frontend (`public/`)
 - **Structure**: Static files served by Express from root `/`.
@@ -36,10 +39,13 @@ Full-stack hotel booking application using Node.js, Express, MySQL, and vanilla 
 - **Environment**: Requires `backend/.env` with `DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`, `SESSION_SECRET`.
 
 ### Database
-- Schema defined in `hotel_booker.sql`.
-- Users table includes `user_type` ('client', 'owner') for role-based access.
+- **Schema**: Defined in `hotel_booker.sql`.
+- **Setup**: Run `node setup_db.js` in `backend/` to reset and seed the database (WARNING: drops all tables).
+- **Tables**: `users` (types: 'client', 'owner'), `hotels`, `rooms`, `bookings`.
+- **Changes**: When modifying schema, update `hotel_booker.sql` and `setup_db.js`.
 
 ## Coding Conventions
 - **Error Handling**: Wrap async route handlers in `try/catch`. Log errors to console but send clean JSON error messages to client.
 - **Security**: Never store plain-text passwords. Always validate input fields before DB insertion.
 - **Frontend**: Avoid inline event handlers; attach listeners in JS files.
+- **Naming**: Snake_case for DB columns (`user_id`), camelCase for JS variables (`userId`).

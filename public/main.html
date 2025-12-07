@@ -52,6 +52,18 @@
       <p class="hotel-hero__desc">
         Welcome to Hotel Booker, your premier destination for booking the finest accommodations. Whether you're planning a business trip or a relaxing getaway, we offer a seamless experience to find and reserve the perfect hotel. Enjoy exclusive deals, trusted reviews, and exceptional customer service, all in one place.
       </p>
+      
+      <div class="search-container" style="margin: 20px 0; padding: 20px; background: rgba(0,0,0,0.5); border-radius: 8px; display: inline-block;">
+        <input type="text" id="searchCity" placeholder="Search by city..." style="padding: 10px; border-radius: 4px; border: none; margin-right: 10px; width: 200px;">
+        <select id="searchStars" style="padding: 10px; border-radius: 4px; border: none; margin-right: 10px;">
+          <option value="">Any Rating</option>
+          <option value="3">3+ Stars</option>
+          <option value="4">4+ Stars</option>
+          <option value="5">5 Stars</option>
+        </select>
+        <button onclick="searchHotels()" class="hotel-button" style="padding: 10px 20px; cursor: pointer; border: none;">Search</button>
+      </div>
+
       <div class="hotel-hero__cta">
         <a href="#hotelListContainer" class="hotel-cta-btn" id="bookNow">VIEW HOTELS</a>
       </div>

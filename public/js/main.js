@@ -52,9 +52,16 @@ document.addEventListener('DOMContentLoaded', checkAuth);
 
 
 // Logic to display hotels on main page
-async function displayHotels() {
+async function displayHotels(city = '', minStars = '') {
     try {
-        const response = await fetch('/api/hotels');
+        let url = '/api/hotels';
+        const params = new URLSearchParams();
+        if (city) params.append('city', city);
+        if (minStars) params.append('min_stars', minStars);
+        
+        if (params.toString()) url += '?' + params.toString();
+
+        const response = await fetch(url);
         const result = await response.json();
 
         if (!response.ok) {
@@ -64,6 +71,11 @@ async function displayHotels() {
 
         const hotelListContainer = document.getElementById('hotelListContainer');
         hotelListContainer.innerHTML = ''; // Clear existing hotels
+
+        if (result.hotels.length === 0) {
+            hotelListContainer.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">No hotels found matching your criteria.</p>';
+            return;
+        }
 
         result.hotels.forEach(function(hotel) {
             const hotelCard = document.createElement('div');
@@ -86,5 +98,12 @@ async function displayHotels() {
     }
 }
 
+function searchHotels() {
+    const city = document.getElementById('searchCity').value;
+    const stars = document.getElementById('searchStars').value;
+    displayHotels(city, stars);
+    document.getElementById('hotelListContainer').scrollIntoView({ behavior: 'smooth' });
+}
+
 // Call displayHotels when page loads
-document.addEventListener('DOMContentLoaded', displayHotels);
+document.addEventListener('DOMContentLoaded', () => displayHotels());

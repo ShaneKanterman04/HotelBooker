@@ -213,9 +213,28 @@ app.get('/api/owner-hotels', requireAuth, requireOwner, async (req, res) => {
 });
 
 app.get('/api/hotels', async (req, res) => {
-	// Endpoint to get all hotels to display on main page
+	// Endpoint to get hotels with optional filtering
 	try {
-		const [hotels] = await db.query('SELECT * FROM hotels');
+		const { city, min_stars } = req.query;
+		let query = 'SELECT * FROM hotels';
+		const params = [];
+		const conditions = [];
+
+		if (city) {
+			conditions.push('city LIKE ?');
+			params.push(`%${city}%`);
+		}
+
+		if (min_stars) {
+			conditions.push('star_rating >= ?');
+			params.push(parseInt(min_stars));
+		}
+
+		if (conditions.length > 0) {
+			query += ' WHERE ' + conditions.join(' AND ');
+		}
+
+		const [hotels] = await db.query(query, params);
 		res.json({ hotels: hotels });
 
 	} catch (err) {
