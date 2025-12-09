@@ -71,11 +71,7 @@ cd HotelBooker
  
 ### Step 2: Set Up the Database
  
-1. **Start your MySQL server** (make sure MySQL is running)
- 
-2. **Open MySQL Workbench** or use the MySQL command line
- 
-3. **Run the SQL schema:**
+1. **Run the SQL schema:**
  
    **Option A - Using MySQL Workbench:**
    - Open MySQL Workbench
@@ -83,12 +79,21 @@ cd HotelBooker
    - Open the `hotel_booker.sql` file
    - Execute the SQL script
  
-   **Option B - Using Terminal:**
+   **Option B - Using Terminal from the HotelBooker directory:**
    ```bash
    mysql -u root -p < hotel_booker.sql
    ```
- 
-4. **Verify the database was created:**
+
+   **Option C(recommended) - Using setup_db.js:**
+   - First, complete Steps 3 and 4 to configure your `.env` file and install dependencies
+   - Then from the HotelBooker directory run:
+   ```bash
+   cd backend
+   node setup_db.js
+   ```
+   - This will create all tables and populate them with sample data
+
+2. **Verify the database was created:**
    ```bash
    mysql -u root -p -e "USE hotel_booker; SHOW TABLES;"
    ```
@@ -112,6 +117,7 @@ cd HotelBooker
    DB_PASS=your_mysql_password_here
    DB_NAME=hotel_booker
    PORT=3000
+   SESSION_SECRET=your_secret_key_here_generate_random_string
    ```
  
 ### Step 4: Install Dependencies in the backend directory
@@ -127,7 +133,7 @@ This will install all required packages:
 - express-session
  
 ### Step 5: Start the Server
- 
+From the backend directory run:
 ```bash
 node server.js
 ```
@@ -143,3 +149,8 @@ Open your browser and navigate to:
 ```
 http://localhost:3000
 ```
+
+From here you can:
+- **Login** if you used `setup_db.js` (sample credentials will be displayed in the terminal)
+- **Register** a new account to get started
+- After logging in, you'll be redirected to the main hotel listing page
