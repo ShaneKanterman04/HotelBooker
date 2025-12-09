@@ -300,23 +300,17 @@
     position: absolute;
     top: 15px;
     right: 15px;
-    background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
-    color: rgba(255, 255, 255, 0.5);
-    transition: color 0.2s, transform 0.2s;
-    z-index: 10;
-}
-
-.favorite-btn:hover {
-    transform: scale(1.1);
+    color: #999;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 1);
 }
 
 .favorite-btn.favorited {
     color: #ff4d4d;
-}    gap: 30px;
-    margin-top: 30px;
+    background: rgba(255, 255, 255, 1);
 }
 
 .hotel-card {
